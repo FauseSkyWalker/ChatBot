@@ -54,12 +54,20 @@ like ```sql
 
 Question: {question}
 """
-prompt = "Is there any discounts right now?"
 
-try:
-    question = QUERY.format(question=prompt)
-    res = db_chain.invoke(question)
-    # print(res)
-    print(res['result'])
-except Exception as e:
-    print('error:', e)
+
+def get_response(prompt):
+    try:
+        question = QUERY.format(question=prompt)
+        res = db_chain.invoke(question)
+        # print(res)
+        # print(res['result'])
+        return res['result']
+    except Exception as e:
+        print('error:', e)
+        raise e
+
+
+if __name__ == "__main__":
+    prompt = "Is there any discounts right now?"
+    print(getResponse(prompt))

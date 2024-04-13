@@ -8,14 +8,15 @@ url = URL.create(
     drivername="postgresql",
     username=config("DB_USER"),
     password=config("DB_PASSWORD"),
-    host="localhost",
-    database="mydb",
-    port=5432
+    host=config("DB_HOST"),
+    database=config("DB_NAME"),
+    port=config("DB_PORT")
 )
 
 engine = create_engine(url)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
+
 
 class Conversation(Base):
     __tablename__ = "conversations"
