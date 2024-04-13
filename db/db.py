@@ -1,4 +1,4 @@
-from chat.models import SessionLocal
+from .models import SessionLocal
 
 
 def get_db():
