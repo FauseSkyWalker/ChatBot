@@ -26,16 +26,21 @@ def get_db():
         db.close()
 
 
+@app.get('/ping')
+async def ping():
+    return {"message": "pong"}
+
+
 @app.post("/message")
-async def reply(body: str = Form(), db: Session = Depends(get_db)):
+async def reply(Body: str = Form(), db: Session = Depends(get_db)):
     # Call the OpenAI API to generate text with GPT-3.5
-    chat_response = get_response(body)
+    chat_response = get_response(Body)
 
     # Store the conversation in the database
     try:
         conversation = Conversation(
             sender=whatsapp_number,
-            message=body,
+            message=Body,
             response=chat_response
         )
         db.add(conversation)

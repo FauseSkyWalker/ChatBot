@@ -66,8 +66,3 @@ def get_response(prompt):
     except Exception as e:
         print('error:', e)
         raise e
-
-
-if __name__ == "__main__":
-    prompt = "Is there any discounts right now?"
-    print(getResponse(prompt))
