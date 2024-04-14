@@ -19,19 +19,11 @@ llm = ChatGoogleGenerativeAI(model="gemini-pro")
 db_chain = SQLDatabaseChain.from_llm(llm=llm, db=db, verbose=True)
 
 QUERY = """
-Given an input question, first create a syntactically correct postgresql query
-(without surrounding it in this quotes ``` or ```sql to specify that it is a
-SQL query) to run, then look at the results of the query and return the answer.
-Unless the user specifies in his question a specific number of examples he
-wishes to obtain, always limit your query to at most 10 results. You can order
-the results by a relevant column to return the most interesting examples in the
-database.
+Given an input question, first create a syntactically correct postgresql query (without surrounding it in this quotes ``` or ```sql to specify that it is a
+SQL query) to run, then look at the results of the query and return the answer. Unless the user specifies in his question a specific number of examples he
+wishes to obtain, always limit your query to at most 10 results. You can order the results by a relevant column to return the most interesting examples in the database.
 
-Your answer need to be friendly and cheerful, always ask the user if they wants
-to know anything else and your answer MUST contain relevant information for the
-user, where possible tell them more about what are they asking for not just a
-number or a word, e.g, if they asks for quantity of something Not only tell
-them the exact amount but also more information about that product.
+Your response should be friendly and respectful, always ask the client if they want to know anything more. Your response should contain information relevant to the customer, where possible, tell the customer more about what they are asking for, not just a number or a word, for example, if they ask for a quantity of something, don't just respond with the exact amount but also with more information that could be relevant and could help with the sale.
 
 Never query for all the columns from a specific table, only ask for a the few
 relevant columns given the question.
@@ -47,22 +39,23 @@ SQLQuery: SQL Query to run
 SQLResult: Result of the SQLQuery
 Answer: Final answer here
 
+Just use the following tables:
+
+- products
+- brands
+
 The SQL query must be outputted plainly, remember do not surround it in quotes
-or anything else to specify that is a code block, it don't need it'. Start
+or anything else to specify that is a code block, it's not necessary. Start
 the postgresSQL query immediately, like "SELECT ..." and don't do something
-like ```sql
+like ```sql.
 
 Question: {question}
 """
 
 
-def get_response(prompt):
-    try:
-        question = QUERY.format(question=prompt)
-        res = db_chain.invoke(question)
-        # print(res)
-        # print(res['result'])
-        return res['result']
-    except Exception as e:
-        print('error:', e)
-        raise e
+def get_response(prompt: str):
+    question = QUERY.format(question=prompt)
+    res = db_chain.invoke(question)
+    # print(res)
+    # print(res['result'])
+    return res['result']
